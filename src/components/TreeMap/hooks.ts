@@ -24,11 +24,11 @@ export const useTreeMap = <TreeMapInputData>({
     .size([width, height])
     .round(true)
     .paddingOuter((node) => paddingOuter(node.depth))
-    .paddingTop((node) => paddingTop(node.depth))
-  (hierarchy(data)
-    .sum((s) => s[valuePropInData])
-    .sort((a, b) => b[valuePropInData] - a[valuePropInData])
-  );
+    .paddingTop((node) => paddingTop(node.depth))(
+      hierarchy(data)
+        .sum((s) => s[valuePropInData])
+        .sort((a, b) => b[valuePropInData] - a[valuePropInData])
+    );
 
   let numberItemId = 0;
   const customNodes = d3TreeMap.each(
