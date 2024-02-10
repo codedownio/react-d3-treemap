@@ -1,3 +1,7 @@
+## 1.0.30 (2024-02-09)
+- Don't hardcode padding for different node depths; be able to configure with callback.
+- Update some dependencies
+
 ## 1.0.29 (2021-09-27)
 - Bump major versions for dependencies
 
