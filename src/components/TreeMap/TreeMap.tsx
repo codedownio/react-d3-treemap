@@ -66,6 +66,7 @@ class TreeMap<TreeMapInputData> extends React.Component<
       namePropInData,
       valuePropInData,
       paddingOuter,
+      paddingTop,
     } = props;
 
     const topNode = useTreeMap({
@@ -74,6 +75,7 @@ class TreeMap<TreeMapInputData> extends React.Component<
       data,
       valuePropInData,
       paddingOuter,
+      paddingTop,
     });
 
     this.state = {

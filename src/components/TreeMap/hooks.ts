@@ -6,7 +6,8 @@ interface TreeMapContext<TreeMapInputData> {
   height: number;
   data: TreeMapInputData;
   valuePropInData: string;
-  paddingOuter: number;
+  paddingOuter: (depth: number) => number;
+  paddingTop: (depth: number) => number;
 }
 
 // Todo. useMemo once TreeMap is refactored to functional component
@@ -16,32 +17,17 @@ export const useTreeMap = <TreeMapInputData>({
   data,
   valuePropInData,
   paddingOuter,
+  paddingTop,
 }: TreeMapContext<TreeMapInputData>): CustomHierarchyRectangularNode<TreeMapInputData> => {
   const d3TreeMap = treemap<TreeMapInputData>()
     .tile(treemapSquarify.ratio(1))
     .size([width, height])
     .round(true)
-    .paddingOuter((node) => {
-      if (node.depth > 2) {
-        return 1;
-      }
-      if (node.depth > 1) {
-        return 2;
-      }
-      return paddingOuter;
-    })
-    .paddingTop((node) => {
-      if (node.depth > 2) {
-        return 3;
-      }
-      if (node.depth > 1) {
-        return 7;
-      }
-      return 19;
-    })(
-    hierarchy(data)
-      .sum((s) => s[valuePropInData])
-      .sort((a, b) => b[valuePropInData] - a[valuePropInData])
+    .paddingOuter((node) => paddingOuter(node.depth))
+    .paddingTop((node) => paddingTop(node.depth))
+  (hierarchy(data)
+    .sum((s) => s[valuePropInData])
+    .sort((a, b) => b[valuePropInData] - a[valuePropInData])
   );
 
   let numberItemId = 0;

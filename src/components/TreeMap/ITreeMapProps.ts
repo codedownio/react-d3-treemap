@@ -104,7 +104,12 @@ export interface ITreeMapProps<TreeMapInputData> {
   /**
    * Padding out of the nodes ( calculated by D3 )
    */
-  paddingOuter?: number;
+  paddingOuter?: (depth: number) => number;
+
+  /**
+   * Padding at top of nodes ( calculated by D3 )
+   */
+  paddingTop?: (depth: number) => number;
 
   /**
    * Padding between nodes ( calculated by D3 )
