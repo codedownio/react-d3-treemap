@@ -7,9 +7,8 @@ import { interpolateSpectral } from "d3-scale-chromatic";
 import { interpolateHcl } from "d3-interpolate";
 
 import Node, { NumberOfChildrenPlacement } from "../Node";
-import Breadcrumb from "../Breadcrumb";
+import Breadcrumb, { IBreadcrumbItem } from "../Breadcrumb";
 import { ITreeMapProps, ColorModel } from "./ITreeMapProps";
-import { ITreeMapState } from "./ITreeMapState";
 import TooltipProvider from "../Tooltip/TooltipProvider";
 import {
   getColorDomainFn,
@@ -25,9 +24,17 @@ export interface CustomHierarchyRectangularNode<TreeMapInputData>
   customId: number;
 }
 
+interface ITreeMapState<TreeMapInputData> {
+  width: number;
+  height: number;
+  breadcrumbItems: IBreadcrumbItem[];
+  topNode: CustomHierarchyRectangularNode<TreeMapInputData>;
+  selectedNode: CustomHierarchyRectangularNode<TreeMapInputData>;
+}
+
 class TreeMap<TreeMapInputData> extends React.Component<
-  ITreeMapProps<TreeMapInputData>,
-  ITreeMapState<TreeMapInputData>
+ITreeMapProps<TreeMapInputData>,
+ITreeMapState<TreeMapInputData>
 > {
   // Default Props values
   public static defaultProps = {
@@ -81,20 +88,17 @@ class TreeMap<TreeMapInputData> extends React.Component<
     this.state = {
       height,
       width,
-      xScaleFunction: scaleLinear()
-        .range([0, width])
-        .domain([topNode.x0, topNode.x1]),
-      yScaleFunction: scaleLinear()
-        .range([0, height])
-        .domain([topNode.y0, topNode.y1]),
       breadcrumbItems: [{ text: data[namePropInData], key: 0 }],
+      topNode,
       selectedNode: topNode,
     };
+
+    console.log("data", data);
+    console.log("selectedNode", this.state.selectedNode);
   }
 
   public componentDidMount(): void {
     const { onTreeMapDidMount } = this.props;
-    this._zoomTo(0);
     if (onTreeMapDidMount) {
       onTreeMapDidMount(this);
     }
@@ -105,16 +109,9 @@ class TreeMap<TreeMapInputData> extends React.Component<
   ): void {
     const { width, height } = nextProps;
     if (height !== this.props.height || width !== this.props.width) {
-      const { selectedNode } = this.state;
       this.setState({
         width,
         height,
-        xScaleFunction: scaleLinear()
-          .range([0, width])
-          .domain([selectedNode.x0, selectedNode.x1]),
-        yScaleFunction: scaleLinear()
-          .range([0, height])
-          .domain([selectedNode.y0, selectedNode.y1]),
       });
     }
   }
@@ -211,7 +208,7 @@ class TreeMap<TreeMapInputData> extends React.Component<
       splitRegExp,
     } = this.props;
 
-    const { xScaleFunction, yScaleFunction, selectedNode } = this.state;
+    const { selectedNode } = this.state;
 
     const { customId, data, x0, x1, y0, y1 } = node;
 
@@ -269,10 +266,8 @@ class TreeMap<TreeMapInputData> extends React.Component<
         value={!hideValue && formattedValue}
         x0={x0}
         x1={x1}
-        xScaleFunction={xScaleFunction}
         y0={y0}
         y1={y1}
-        yScaleFunction={yScaleFunction}
         numberOfChildrenPlacement={numberOfChildrenPlacement}
         paddingInner={paddingInner}
         splitRegExp={splitRegExp}
@@ -344,8 +339,8 @@ class TreeMap<TreeMapInputData> extends React.Component<
             .domain([0, node && node.children ? node.children.length : 0])
             .interpolate(interpolateHcl)
             .range(["white", originalBackgroundColor])(
-            getTopSubParentId<TreeMapInputData>(node)
-          );
+              getTopSubParentId<TreeMapInputData>(node)
+            );
         } else {
           backgroundColor = originalBackgroundColor;
         }
@@ -369,11 +364,11 @@ class TreeMap<TreeMapInputData> extends React.Component<
   }
 
   private _zoomTo(nodeId: number) {
-    const { xScaleFunction, yScaleFunction, selectedNode } = this.state;
+    const { topNode } = this.state;
 
-    const { onZoom } = this.props;
+    const { onZoom, height, width, valuePropInData, paddingOuter, paddingTop, data } = this.props;
 
-    const currentNode = getTopParent(selectedNode)
+    const currentNode = topNode
       .descendants()
       .filter((item: CustomHierarchyRectangularNode<TreeMapInputData>) => {
         return item.customId.toString() === nodeId.toString();
@@ -400,9 +395,14 @@ class TreeMap<TreeMapInputData> extends React.Component<
       }
 
       this.setState({
-        xScaleFunction: xScaleFunction.domain([currentNode.x0, currentNode.x1]),
-        yScaleFunction: yScaleFunction.domain([currentNode.y0, currentNode.y1]),
-        selectedNode: currentNode,
+        selectedNode: useTreeMap({
+          width,
+          height,
+          data: currentNode.data,
+          valuePropInData,
+          paddingOuter,
+          paddingTop,
+        }),
         breadcrumbItems,
       });
     } else {

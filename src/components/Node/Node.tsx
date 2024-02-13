@@ -36,8 +36,6 @@ export interface NodeProps {
   treemapId?: string;
   url: string;
   value: string;
-  xScaleFunction?: ScaleLinear<number, number>;
-  yScaleFunction?: ScaleLinear<number, number>;
   paddingInner: number;
   splitRegExp?: RegExp
 }
@@ -59,24 +57,20 @@ const Node: React.FunctionComponent<NodeProps> = ({
   value,
   x0,
   x1,
-  xScaleFunction,
   y0,
   y1,
-  yScaleFunction,
   style,
   numberOfChildrenPlacement,
   paddingInner,
   splitRegExp,
 }) => {
-  const currentXTranslated = Math.max(0, xScaleFunction(x0) + paddingInner);
-  const currentYTranslated = Math.max(0, yScaleFunction(y0) + paddingInner);
   const currentWidth = Math.max(
     0,
-    xScaleFunction(x1) - xScaleFunction(x0) - paddingInner
+    x1 - x0 - paddingInner
   );
   const currentHeight = Math.max(
     0,
-    yScaleFunction(y1) - yScaleFunction(y0) - paddingInner
+    y1 - y0 - paddingInner
   );
 
   const cursor =
@@ -119,7 +113,7 @@ const Node: React.FunctionComponent<NodeProps> = ({
       onMouseEnter={disableTooltip ? undefined : handleMouseMove}
       onMouseLeave={disableTooltip ? undefined : handleMouseLeave}
       onMouseMove={disableTooltip ? undefined : handleMouseMove}
-      transform={`translate(${currentXTranslated},${currentYTranslated})`}
+      transform={`translate(${x0},${y0})`}
       id={`${id}`}
       onClick={hasChildren ? onClick : null}
       style={{ cursor }}
