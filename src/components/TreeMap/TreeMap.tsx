@@ -138,7 +138,7 @@ class TreeMap<TreeMapInputData> extends React.Component<
     } = this.props;
 
     let reactNodes: Array<React.ReactNode> = [];
-    const maxLevel = selectedNode.depth === 0 ? levelsToDisplay : 1;
+    const maxLevel = selectedNode.depth + levelsToDisplay;
     const iterateAllChildren = (
       mainNode: CustomHierarchyRectangularNode<TreeMapInputData>,
       level: number
