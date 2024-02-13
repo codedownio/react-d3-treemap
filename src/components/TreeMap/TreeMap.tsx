@@ -29,33 +29,6 @@ class TreeMap<TreeMapInputData> extends React.Component<
   ITreeMapProps<TreeMapInputData>,
   ITreeMapState<TreeMapInputData>
 > {
-  // Default Props values
-  public static defaultProps = {
-    id: "myTreeMap",
-    data: null,
-    height: 600,
-    width: 600,
-    valueFormat: ",d",
-    disableBreadcrumb: false,
-    colorModel: ColorModel.OneEachChildren,
-    paddingInner: 4,
-    paddingOuter: 4,
-    customD3ColorScale: scaleSequential(interpolateSpectral),
-    namePropInData: "name",
-    linkPropInData: "link",
-    valuePropInData: "value", // can be value, count, ...
-    childrenPropInData: "children",
-    numberOfChildrenPlacement: NumberOfChildrenPlacement.BottomRight,
-    darkNodeTextColor: "white",
-    darkNodeBorderColor: "white",
-    lightNodeTextColor: "black",
-    lightNodeBorderColor: "black",
-    disableTooltip: false,
-    tooltipOffsetX: 0,
-    tooltipOffsetY: 0,
-    levelsToDisplay: 1,
-  };
-
   constructor(props: ITreeMapProps<TreeMapInputData>) {
     super(props);
 
