@@ -1,3 +1,6 @@
+## 1.0.31 (2024-02-09)
+- Re-publish with NPM instead of Yarn. The latter was missing the CSS.
+
 ## 1.0.30 (2024-02-09)
 - Don't hardcode padding for different node depths; be able to configure with callback.
 - Update some dependencies
