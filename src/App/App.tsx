@@ -53,7 +53,7 @@ class App extends React.Component<unknown, { data: TreeMapInPutData }> {
                 valueFn={(value: number) => {
                   return `${value.toString().charAt(0)} min`;
                 }}
-                // levelsToDisplay={2}
+                levelsToDisplay={3}
                 // tooltipOffsetY={25}
                 // tooltipClassName="MyCustomTooltip"
                 // tooltipPlacement="top"
@@ -61,7 +61,7 @@ class App extends React.Component<unknown, { data: TreeMapInPutData }> {
                 // valueUnit={"MB"}
                 // svgClassName="AppTreeMap__svg"
                 paddingOuter={() => 0}
-                paddingTop={() => 0}
+                paddingTop={() => 19}
                 paddingInner={0}
                 // onZoom={(level, id, items) => console.log({ level, id, items })}
                 // onTreeMapDidMount={(treeMap: TreeMap<TreeMapInPutData>) =>
