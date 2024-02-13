@@ -7,6 +7,7 @@
   "style": "dist/react.d3.treemap.css",
   "scripts": {
     "dev": "webpack serve --open --config ./webpack/webpack.config.dev.js",
+    "tsc": "tsc -w --noEmit",
     "build": "rm -rf ./dist & webpack --progress --config ./webpack/webpack.config.prod.js",
     "stats": "rm -rf ./dist & webpack --progress --config ./webpack/webpack.config.stats.js --profile --json > ./webpack/stats/stats.json",
     "gatsby:deploy": "gatsby build --prefix-paths && gh-pages -d public",
