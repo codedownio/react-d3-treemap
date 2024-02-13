@@ -219,10 +219,7 @@ class TreeMap<TreeMapInputData> extends React.Component<
     const url = data[linkPropInData];
     const nodeClassNameFromData = data["className"];
 
-    const hasChildren =
-      node[childrenPropInData] && node[childrenPropInData].length > 0
-        ? true
-        : false;
+    const hasChildren = !!(node[childrenPropInData] && node[childrenPropInData].length > 0)
     let formatted = node[valuePropInData];
     try {
       formatted = getValueFormatFn(valueFn, valueFormat)(node[valuePropInData]);
